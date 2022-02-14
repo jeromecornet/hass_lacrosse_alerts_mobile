@@ -1,0 +1,6 @@
+{
+  "name": "lacrosse_alerts_mobile",
+  "country": "US",
+  "render_readme": true,
+  "domains": ["sensor"]
+}

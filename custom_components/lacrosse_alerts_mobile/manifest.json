@@ -1,0 +1,8 @@
+{
+  "domain": "https://github.com/regulad",
+  "name": "lacrosse_alerts_mobile",
+  "documentation": "https://github.com/regulad/hass_lacrosse_alerts_mobile",
+  "dependencies": [],
+  "codeowners": ["Legomaniac", "regulad"],
+  "requirements": ["pylacrossapi==0.3"]
+}
