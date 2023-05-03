@@ -7,11 +7,17 @@ Usage:
 ~~~
   sensor:
     - platform: lacrosse_alerts_mobile
-      id: !secret lacrosse_id
+      id: !secret lacrosse_hottub_id
+      name: Hot tub
+    - platform: lacrosse_alerts_mobile
+      id: !secret lacrosse_porch_id
+      name: Porch
+
 ~~~
 - Place the following in your secrets.yaml:
 ~~~
-  lacrosse_id: <16 digit id number from back of unit>
+  lacrosse_hottub_id: <16 digit id number from back of unit>
+  lacrosse_porch_id: <16 digit id number from back of unit>
 ~~~
 ----
 Progess:
