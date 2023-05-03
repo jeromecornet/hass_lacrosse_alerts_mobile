@@ -21,7 +21,7 @@ CONF_TZ = "timezone"
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_ID): cv.string,
     vol.Optional(CONF_NAME): cv.string,
-    vol.Optional(CONF_TZ): cv.int
+    vol.Optional(CONF_TZ): cv.positive_int
 })
 
 
