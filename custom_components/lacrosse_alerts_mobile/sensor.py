@@ -37,6 +37,9 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     add_devices([LaCrosseAmbientSensor(device_name,device_id, ld)])
     add_devices([LaCrosseProbeSensor(device_name,device_id, ld)])
     add_devices([LaCrosseHumidSensor(device_name,device_id, ld)])
+    add_devices([LaCrosseBatterySensor(device_name,device_id, ld)])
+    add_devices([LaCrosseSignalSensor(device_name,device_id, ld)])
+    add_devices([LaCrosseUpdateSensor(device_name,device_id, ld)])
 
 
 class LaCrosseSensor(Entity):
@@ -47,13 +50,15 @@ class LaCrosseSensor(Entity):
         self._lacrosse_device = ld
         self._state = None
         self._attr_name = device_name or "LaCrosse-"+device_id
+        obs = ld.getObservation(1)
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, device_id)},
             name=device_name,
+            model=obs["device_type"],
+            manufacturer="LaCrosse"
         )
 
 class LaCrosseAmbientSensor(LaCrosseSensor):
-
     @property
     def name(self):
         """Return the name of the sensor."""
@@ -118,3 +123,54 @@ class LaCrosseHumidSensor(LaCrosseSensor):
     def update(self):
         obs = self._lacrosse_device.getObservation(1)
         self._state = obs[0]['humidity']
+
+class LaCrosseBatterySensor(LaCrosseSensor):
+    @property
+    def name(self):
+        """Return the name of the sensor."""
+        return self._attr_name + '.Low_Battery'
+
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        return self._state
+        
+    def update(self):
+        obs = self._lacrosse_device.getObservation(1)
+        self._state = (obs[0]['lowbattery'] == 1)
+
+class LaCrosseSignalSensor(LaCrosseSensor):
+    @property
+    def name(self):
+        """Return the name of the sensor."""
+        return self._attr_name + '.Signal_Strength'
+
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        return self._state
+
+    @property
+    def unit_of_measurement(self):
+        """Return the unit of measurement."""
+        return 'dB'
+        
+    def update(self):
+        obs = self._lacrosse_device.getObservation(1)
+        self._state = obs[0]['linkquality']
+
+class LaCrosseUpdateSensor(LaCrosseSensor):
+    @property
+    def name(self):
+        """Return the name of the sensor."""
+        return self._attr_name + '.Last_Seen_At'
+
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        return self._state
+        
+    def update(self):
+        obs = self._lacrosse_device.getObservation(1)
+        self._state = obs[0]['utctime']
+                                
