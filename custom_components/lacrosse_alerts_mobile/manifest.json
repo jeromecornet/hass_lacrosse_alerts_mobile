@@ -1,6 +1,7 @@
 {
   "domain": "lacrosse_alerts_mobile",
   "name": "lacrosse_alerts_mobile",
+  "version": "0.0.1",
   "documentation": "https://github.com/regulad/hass_lacrosse_alerts_mobile",
   "dependencies": [],
   "codeowners": ["Legomaniac", "regulad"],
