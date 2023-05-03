@@ -55,14 +55,16 @@ class LaCrosseSensor(Entity):
     def __init__(self, device_name, device_id, ld):
         """Initialize the sensor."""
         self._lacrosse_device = ld
+        self._device_id = device_id
         self._state = None
-        self._attr_name = device_name or "LaCrosse-"+device_id
+        name = device_name or "LaCrosse-"+device_id
+        self._attr_name = name
         obs = ld.getObservation(1)[0]
         self._device_info = DeviceInfo(
             identifiers={(DOMAIN, device_id)},
-            name=device_name,
+            name_by_user=name,
             model=obs["device_type"],
-            manufacturer="LaCrosse"
+            manufacturer="La Crosse"
         )
 
     @property
@@ -76,6 +78,11 @@ class LaCrosseAmbientSensor(LaCrosseSensor):
     def name(self):
         """Return the name of the sensor."""
         return self._attr_name + '.Ambient_Temp'
+
+    @property
+    def unique_id(self):
+        DOMAIN + self._device_id + "AmbientTemp"        
+
 
     @property
     def state(self):
@@ -96,6 +103,10 @@ class LaCrosseProbeSensor(LaCrosseSensor):
     def name(self):
         """Return the name of the sensor."""
         return self._attr_name + '.Probe_Temp'
+    
+    @property
+    def unique_id(self):
+        DOMAIN + self._device_id + "ProbeTemp"        
 
     @property
     def state(self):
@@ -117,6 +128,10 @@ class LaCrosseHumidSensor(LaCrosseSensor):
     def name(self):
         """Return the name of the sensor."""
         return self._attr_name + '.Ambient_Humidity'
+
+    @property
+    def unique_id(self):
+        DOMAIN + self._device_id + "AmbientHumidity"        
 
     @property
     def unit_of_measurement(self):
@@ -144,6 +159,10 @@ class LaCrosseBatterySensor(LaCrosseSensor):
         return self._attr_name + '.Low_Battery'
 
     @property
+    def unique_id(self):
+        DOMAIN + self._device_id + "LowBattery"        
+
+    @property
     def state(self):
         """Return the state of the sensor."""
         return self._state
@@ -166,6 +185,10 @@ class LaCrosseSignalSensor(LaCrosseSensor):
         return self._attr_name + '.Signal_Strength'
 
     @property
+    def unique_id(self):
+        DOMAIN + self._device_id + "SignalStrength"        
+
+    @property
     def state(self):
         """Return the state of the sensor."""
         return self._state
@@ -184,6 +207,10 @@ class LaCrosseUpdateSensor(LaCrosseSensor):
     def name(self):
         """Return the name of the sensor."""
         return self._attr_name + '.Last_Seen_At'
+    
+    @property
+    def unique_id(self):
+        DOMAIN + self._device_id + "LastSeenAt"        
 
     @property
     def state(self):
