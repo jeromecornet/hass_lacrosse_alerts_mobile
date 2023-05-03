@@ -145,7 +145,14 @@ class LaCrosseBatterySensor(LaCrosseSensor):
         
     def update(self):
         obs = self._lacrosse_device.getObservation(1)
-        self._state = measureOrNone(obs[0],'lowbattery')
+        meas =  measureOrNone(obs[0],'lowbattery') 
+        if meas is None:
+            self._state = None
+        elif meas == 0:
+            self._state = False
+        else:
+            self._state = True    
+        
 
 class LaCrosseSignalSensor(LaCrosseSensor):
     @property
