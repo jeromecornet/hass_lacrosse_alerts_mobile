@@ -27,22 +27,24 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
+    from pylacrossapi import lacrosse
+
     """Setup the lacrosse alerts mobile platform."""
     device_id = config.get(CONF_ID)
     device_name = config.get(CONF_NAME)
     timezone = config.get(CONF_TZ)   
-    add_devices([LaCrosseAmbientSensor(device_name,device_id, timezone)])
-    add_devices([LaCrosseProbeSensor(device_name,device_id, timezone)])
-    add_devices([LaCrosseHumidSensor(device_name,device_id, timezone)])
+    ld = lacrosse(device_id, UNIT, timezone or TIME_ZONE)
+    add_devices([LaCrosseAmbientSensor(device_name,device_id, ld)])
+    add_devices([LaCrosseProbeSensor(device_name,device_id, ld)])
+    add_devices([LaCrosseHumidSensor(device_name,device_id, ld)])
 
 
 class LaCrosseSensor(Entity):
-    import pylacrossapi
 
     """Representation of a LaCrosse Alerts Mobile Sensor."""
-    def __init__(self, device_name, device_id, timezone):
+    def __init__(self, device_name, device_id, ld):
         """Initialize the sensor."""
-        self._lacrosse_device =   pylacrossapi.lacrosse(device_id, UNIT, timezone or TIME_ZONE)
+        self._lacrosse_device = ld
         self._state = None
         self._attr_name = device_name or "LaCrosse-"+device_id
         self._attr_device_info = DeviceInfo(
