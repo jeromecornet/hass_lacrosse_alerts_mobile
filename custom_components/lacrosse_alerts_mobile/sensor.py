@@ -50,7 +50,7 @@ class LaCrosseSensor(Entity):
         self._lacrosse_device = ld
         self._state = None
         self._attr_name = device_name or "LaCrosse-"+device_id
-        obs = ld.getObservation(1)
+        obs = ld.getObservation(1)[0]
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, device_id)},
             name=device_name,
