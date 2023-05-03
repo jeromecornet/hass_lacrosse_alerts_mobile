@@ -7,6 +7,7 @@ from homeassistant.const import TEMP_CELSIUS, CONF_ID, CONF_NAME
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import Entity, DeviceInfo
 from . import DOMAIN
+from datetime import datetime
 
 
 
@@ -172,5 +173,5 @@ class LaCrosseUpdateSensor(LaCrosseSensor):
         
     def update(self):
         obs = self._lacrosse_device.getObservation(1)
-        self._state = obs[0]['utctime']
+        self._state = datetime.fromtimestamp(obs[0]['utctime'])
                                 
