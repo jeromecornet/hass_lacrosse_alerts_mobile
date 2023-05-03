@@ -51,7 +51,6 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
 
 
 class LaCrosseSensor(Entity):
-
     """Representation of a LaCrosse Alerts Mobile Sensor."""
     def __init__(self, device_name, device_id, ld):
         """Initialize the sensor."""
@@ -59,12 +58,18 @@ class LaCrosseSensor(Entity):
         self._state = None
         self._attr_name = device_name or "LaCrosse-"+device_id
         obs = ld.getObservation(1)[0]
-        self._attr_device_info = DeviceInfo(
+        self._device_info = DeviceInfo(
             identifiers={(DOMAIN, device_id)},
             name=device_name,
             model=obs["device_type"],
             manufacturer="LaCrosse"
         )
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device info."""
+        return  self._device_info
+    
 
 class LaCrosseAmbientSensor(LaCrosseSensor):
     @property
