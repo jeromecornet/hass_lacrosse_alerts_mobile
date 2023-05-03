@@ -18,6 +18,7 @@ _LOGGER = logging.getLogger(__name__)
 UNIT = 1 # 1 = ˚C , 0 = ˚F
 TIME_ZONE = 17 # America/Toronto
 CONF_TZ = "timezone"
+STALE_TIMEOUT_MINUTES = 15
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_ID): cv.string,
@@ -25,6 +26,12 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_TZ): cv.positive_int
 })
 
+
+def measureOrNone(obs, key):
+    if datetime.timestamp(datetime.now()) - obs['utctime'] < STALE_TIMEOUT_MINUTES * 60:
+        return obs[key]
+    else:
+        return None
 
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
@@ -77,7 +84,7 @@ class LaCrosseAmbientSensor(LaCrosseSensor):
         
     def update(self):
         obs = self._lacrosse_device.getObservation(1)
-        self._state = obs[0]['ambient_temp']
+        self._state = measureOrNone(obs[0],'ambient_temp')
         
 class LaCrosseProbeSensor(LaCrosseSensor):
     @property
@@ -97,7 +104,7 @@ class LaCrosseProbeSensor(LaCrosseSensor):
         
     def update(self):
         obs = self._lacrosse_device.getObservation(1)
-        self._state = obs[0]['probe_temp']
+        self._state = measureOrNone(obs[0],'probe_temp')
 
 
 class LaCrosseHumidSensor(LaCrosseSensor):
@@ -123,7 +130,7 @@ class LaCrosseHumidSensor(LaCrosseSensor):
 
     def update(self):
         obs = self._lacrosse_device.getObservation(1)
-        self._state = obs[0]['humidity']
+        self._state = measureOrNone(obs[0],'humidity')
 
 class LaCrosseBatterySensor(LaCrosseSensor):
     @property
@@ -138,7 +145,7 @@ class LaCrosseBatterySensor(LaCrosseSensor):
         
     def update(self):
         obs = self._lacrosse_device.getObservation(1)
-        self._state = (obs[0]['lowbattery'] == 1)
+        self._state = measureOrNone(obs[0],'lowbattery')
 
 class LaCrosseSignalSensor(LaCrosseSensor):
     @property
@@ -158,7 +165,7 @@ class LaCrosseSignalSensor(LaCrosseSensor):
         
     def update(self):
         obs = self._lacrosse_device.getObservation(1)
-        self._state = obs[0]['linkquality']
+        self._state = measureOrNone(obs[0],'linkquality')    
 
 class LaCrosseUpdateSensor(LaCrosseSensor):
     @property
