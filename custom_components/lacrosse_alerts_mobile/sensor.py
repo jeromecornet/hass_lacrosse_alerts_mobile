@@ -81,8 +81,7 @@ class LaCrosseAmbientSensor(LaCrosseSensor):
 
     @property
     def unique_id(self):
-        DOMAIN + self._device_id + "AmbientTemp"        
-
+        return DOMAIN + self._device_id + "AmbientTemp"        
 
     @property
     def state(self):
@@ -106,7 +105,7 @@ class LaCrosseProbeSensor(LaCrosseSensor):
     
     @property
     def unique_id(self):
-        DOMAIN + self._device_id + "ProbeTemp"        
+        return DOMAIN + self._device_id + "ProbeTemp"        
 
     @property
     def state(self):
@@ -131,7 +130,7 @@ class LaCrosseHumidSensor(LaCrosseSensor):
 
     @property
     def unique_id(self):
-        DOMAIN + self._device_id + "AmbientHumidity"        
+        return DOMAIN + self._device_id + "AmbientHumidity"        
 
     @property
     def unit_of_measurement(self):
@@ -160,7 +159,7 @@ class LaCrosseBatterySensor(LaCrosseSensor):
 
     @property
     def unique_id(self):
-        DOMAIN + self._device_id + "LowBattery"        
+        return DOMAIN + self._device_id + "LowBattery"        
 
     @property
     def state(self):
@@ -183,7 +182,7 @@ class LaCrosseSignalSensor(LaCrosseSensor):
 
     @property
     def unique_id(self):
-        DOMAIN + self._device_id + "SignalStrength"        
+        return DOMAIN + self._device_id + "SignalStrength"        
 
     @property
     def state(self):
@@ -207,7 +206,7 @@ class LaCrosseUpdateSensor(LaCrosseSensor):
     
     @property
     def unique_id(self):
-        DOMAIN + self._device_id + "LastSeenAt"        
+        return DOMAIN + self._device_id + "LastSeenAt"        
 
     @property
     def state(self):
