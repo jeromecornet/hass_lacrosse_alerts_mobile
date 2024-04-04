@@ -45,6 +45,7 @@ async def async_setup_platform(hass, config, add_devices, discovery_info=None):
     device_name = config.get(CONF_NAME)
     timezone = config.get(CONF_TZ)
     ld = lacrosse(device_id, UNIT, timezone or TIME_ZONE)
+    _LOGGER.info("Setting up lacrosse alerts for device %s", device_name)
     sensors = await hass.async_add_executor_job(lambda: all_sensors(hass, device_name, device_id, ld))
     add_devices(sensors)
 
@@ -60,13 +61,16 @@ class LaCrosseSensor(SensorEntity):
         self._state = None
         name = device_name or "LaCrosse-" + device_id
         self._attr_name = name
-        obs = ld.getObservation(1)[0]
-        self._device_info = DeviceInfo(
-            identifiers={(DOMAIN, self._device_id)},
-            name_by_user=self._attr_name,
-            model=obs["device_type"],
-            manufacturer="La Crosse",
-        )
+        try:
+            obs = ld.getObservation(1)[0]
+            self._device_info = DeviceInfo(
+                identifiers={(DOMAIN, self._device_id)},
+                name_by_user=self._attr_name,
+                model=obs["device_type"],
+                manufacturer="La Crosse",
+            )
+        except Exception as e:
+            _LOGGER.exception("Cannot setup sensor %s", name, exc_info=e)    
 
     @property
     def state_class(self):
