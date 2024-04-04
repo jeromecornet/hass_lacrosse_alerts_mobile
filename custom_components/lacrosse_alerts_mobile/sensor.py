@@ -4,7 +4,7 @@ import voluptuous as vol
 
 from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
 
-from homeassistant.const import TEMP_CELSIUS, CONF_ID, CONF_NAME
+from homeassistant.const import UnitOfTemperature, CONF_ID, CONF_NAME
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import DeviceInfo
 
@@ -70,7 +70,7 @@ class LaCrosseSensor(SensorEntity):
                 manufacturer="La Crosse",
             )
         except Exception as e:
-            _LOGGER.exception("Cannot setup sensor %s", name, exc_info=e)    
+            _LOGGER.exception("Cannot setup sensor %s", [self._attr_name], exc_info=e)    
 
     @property
     def state_class(self):
@@ -105,7 +105,7 @@ class LaCrosseAmbientSensor(LaCrosseSensor):
     @property
     def unit_of_measurement(self):
         """Return the unit of measurement."""
-        return TEMP_CELSIUS
+        return UnitOfTemperature.CELSIUS
 
     async def async_update(self):
         obs = await self._hass.async_add_executor_job(self.get_latest_observation)
@@ -130,7 +130,7 @@ class LaCrosseProbeSensor(LaCrosseSensor):
     @property
     def unit_of_measurement(self):
         """Return the unit of measurement."""
-        return TEMP_CELSIUS
+        return UnitOfTemperature.CELSIUS
 
     async def async_update(self):
         obs = await self._hass.async_add_executor_job(self.get_latest_observation)
